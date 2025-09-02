@@ -1,6 +1,4 @@
 # FasTravel
-Perfeito 🚀
-Aqui está um **README inicial pronto** para o seu projeto **FasTravel**. Já deixei organizado com descrição, tecnologias, estrutura e instruções de instalação:
 
 ---
 
@@ -108,11 +106,6 @@ O app sobe em `http://localhost:3000`.
 * [ ] Adicionar testes automatizados (Jest + Supertest)
 * [ ] Configurar Postman com requests prontos
 * [ ] Documentar API com Swagger
-
----
-
-✍️ **Autor**: [Joao2007Pedro](https://github.com/Joao2007Pedro)
-
 ---
 
 👉 Você quer que eu já crie esse `README.md` formatado em **Markdown** e os arquivos `.gitkeep` nas pastas `backend/` e `frontend/` pra você só dar `git add . && git commit && git push`?
