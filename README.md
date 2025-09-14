@@ -42,7 +42,7 @@ O projeto é desenvolvido como parte de um trabalho acadêmico, dividido em **tr
 
 ---
 
-## 📂 Estrutura de Pastas (sugerida)
+## 📂 Estrutura de Pastas
 
 ```
 /FasTravel
@@ -107,5 +107,3 @@ O app sobe em `http://localhost:3000`.
 * [ ] Configurar Postman com requests prontos
 * [ ] Documentar API com Swagger
 ---
-
-👉 Você quer que eu já crie esse `README.md` formatado em **Markdown** e os arquivos `.gitkeep` nas pastas `backend/` e `frontend/` pra você só dar `git add . && git commit && git push`?
