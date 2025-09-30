@@ -1,0 +1,65 @@
+# Node
+node_modules/
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Logs
+logs/
+*.log
+*.gz
+*.pid
+*.seed
+*.pid.lock
+
+# Env
+.env
+.env.*
+!.env.example
+backend/.env
+
+# Build/Output
+dist/
+build/
+out/
+coverage/
+.nyc_output/
+.cache/
+
+# Frameworks (caso use)
+.next/
+.nuxt/
+.svelte-kit/
+
+# TypeScript
+*.tsbuildinfo
+
+# IDE/Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*.orig
+.history/
+
+# SO
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Tests
+test-results/
+jest-html-reporters-*
+
+# Uploads e temporários
+uploads/
+tmp/
+temp/
+
+# Bancos locais
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
