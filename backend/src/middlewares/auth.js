@@ -1,15 +1,20 @@
+// backend/src/middlewares/auth.js
 const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
-  const header = req.headers.authorization || '';
-  const [type, token] = header.split(' ');
-  if (type !== 'Bearer' || !token) return res.status(401).json({ error: 'Token ausente' });
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) return res.status(401).json({ error: 'Token não fornecido' });
+
+  const token = authHeader.split(' ')[1]; // "Bearer <token>"
+
+  if (!token) return res.status(401).json({ error: 'Token inválido' });
 
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET || 'dev_secret');
-    req.user = payload;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'dev_secret');
+    req.userId = decoded.id; // opcional, pra usar nas rotas
     next();
-  } catch (e) {
-    return res.status(401).json({ error: 'Token inválido' });
+  } catch (err) {
+    return res.status(401).json({ error: 'Token inválido ou expirado' });
   }
 };

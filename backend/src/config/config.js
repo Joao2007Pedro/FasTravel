@@ -2,7 +2,7 @@
 module.exports = {
   development: {
     username: "root",
-    password: "1234",
+    password: "Natalicia79",
     database: "fastravel_dev",
     host: "127.0.0.1",
     dialect: "mysql"
@@ -16,7 +16,7 @@ module.exports = {
   },
   production: {
     username: "root",
-    password: "1234",
+    password: "Natalicia79",
     database: "fastravel_prod",
     host: "127.0.0.1",
     dialect: "mysql"
