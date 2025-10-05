@@ -16,8 +16,6 @@ Crie um arquivo `.env` na pasta `backend/` baseado no `.env.example`:
 cp .env.example .env
 ```
 
-Edite o `.env` com as credenciais do ambiente (usuário/senha/host do MySQL, nomes dos bancos, JWT_SECRET etc.). Por exemplo, em outro PC a senha pode não ser `Natalicia79`, ajuste `DEV_DB_PASS` (e os demais conforme necessário).
-
 ## 3) Instalar dependências
 
 ```
