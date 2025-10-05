@@ -32,7 +32,8 @@ O projeto é desenvolvido como parte de um trabalho acadêmico, dividido em **tr
 ### **Frontend**
 
 * React (Create React App)
-* Bootstrap
+* Bootstrap 5
+* Tailwind CSS
 
 ### **Ferramentas de apoio**
 
@@ -47,23 +48,28 @@ O projeto é desenvolvido como parte de um trabalho acadêmico, dividido em **tr
 ```
 /FasTravel
 ├─ backend
-│  ├─ src
-│  │  ├─ app.js
-│  │  ├─ server.js
-│  │  ├─ config/
-│  │  ├─ models/
-│  │  ├─ routes/
-│  │  ├─ controllers/
-│  │  └─ tests/
-│  └─ package.json
+│  ├─ .env.example
+│  ├─ README.md
+│  ├─ package.json
+│  └─ src/
+│     ├─ app.js
+│     ├─ config/
+│     ├─ controllers/
+│     ├─ middlewares/
+│     ├─ migrations/
+│     ├─ models/
+│     └─ routers/
 │
 ├─ frontend
+│  ├─ package.json
 │  ├─ public/
-│  ├─ src/
-│  │  ├─ pages/
-│  │  ├─ services/
-│  │  └─ App.js
-│  └─ package.json
+│  └─ src/
+│     ├─ components/
+│     ├─ context/
+│     ├─ pages/
+│     ├─ services/
+│     ├─ App.jsx
+│     └─ index.js
 │
 └─ README.md
 ```
@@ -85,7 +91,9 @@ npm install
 npm run dev
 ```
 
-O servidor sobe em `http://localhost:3001`.
+Por padrão, o backend usa a porta definida no `.env` (variável `PORT`).
+Se não houver `PORT`, ele sobe em `http://localhost:3000`.
+Recomenda-se definir `PORT=3001` no backend para evitar conflito com o frontend em `3000`.
 
 ### **Rodando o Frontend**
 
@@ -97,13 +105,21 @@ npm start
 
 O app sobe em `http://localhost:3000`.
 
+Se estiver usando Tailwind, você pode rodar o watcher (opcional) em outro terminal:
+
+```bash
+cd frontend
+npm run tailwind:build
+```
+
 ---
 
 ## ✅ Próximos Passos
 
-* [ ] Implementar CRUD de voos no backend
-* [ ] Criar interface inicial de listagem de voos no frontend
-* [ ] Adicionar testes automatizados (Jest + Supertest)
-* [ ] Configurar Postman com requests prontos
+* [ ] Completar CRUD de usuários e voos (GET/PUT/DELETE)
+* [ ] Proteger rotas sensíveis com JWT e rate limit
+* [ ] Filtros/paginação em voos e reservas
+* [ ] Testes (Jest + Supertest) e coleção Postman
 * [ ] Documentar API com Swagger
+* [ ] Seeders de dados para desenvolvimento
 ---

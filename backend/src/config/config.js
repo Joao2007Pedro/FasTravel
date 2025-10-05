@@ -1,24 +1,24 @@
 // backend/src/config/config.js
 module.exports = {
   development: {
-    username: "root",
-    password: "Natalicia79",
-    database: "fastravel_dev",
-    host: "127.0.0.1",
-    dialect: "mysql"
+    username: process.env.DEV_DB_USER,
+    password: process.env.DEV_DB_PASS,
+    database: process.env.DEV_DB_NAME,
+    host: process.env.DEV_DB_HOST,
+    dialect: process.env.DB_DIALECT || "mysql",
   },
   test: {
-    username: "root",
-    password: "1234",
-    database: "fastravel_test",
-    host: "127.0.0.1",
-    dialect: "mysql"
+    username: process.env.TEST_DB_USER,
+    password: process.env.TEST_DB_PASS,
+    database: process.env.TEST_DB_NAME,
+    host: process.env.TEST_DB_HOST,
+    dialect: process.env.DB_DIALECT || "mysql",
   },
   production: {
-    username: "root",
-    password: "Natalicia79",
-    database: "fastravel_prod",
-    host: "127.0.0.1",
-    dialect: "mysql"
-  }
+    username: process.env.PROD_DB_USER,
+    password: process.env.PROD_DB_PASS,
+    database: process.env.PROD_DB_NAME,
+    host: process.env.PROD_DB_HOST,
+    dialect: process.env.DB_DIALECT || "mysql",
+  },
 };
