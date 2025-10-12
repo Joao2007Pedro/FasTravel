@@ -25,7 +25,7 @@ app.use("/bookings", require("./routers/bookingRoutes"));
 app.use("/auth", require("./routers/authRoutes"));
 
 // Iniciar servidor
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 db.sequelize
   .authenticate()

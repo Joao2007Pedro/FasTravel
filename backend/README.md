@@ -1,6 +1,6 @@
 # FasTravel Backend
 
-Guia rápido para rodar em diferentes ambientes (dev, test, prod).
+Guia de configuração e execução do backend (Express + Sequelize).
 
 ## 1) Pré-requisitos
 
@@ -8,13 +8,22 @@ Guia rápido para rodar em diferentes ambientes (dev, test, prod).
 - MySQL Server 8+
 - NPM
 
-## 2) Configurar variáveis de ambiente
+## 2) Variáveis de ambiente
 
-Crie um arquivo `.env` na pasta `backend/` baseado no `.env.example`:
+Crie `backend/.env` a partir de `backend/.env.example`:
 
 ```
 cp .env.example .env
 ```
+
+Conteúdo do `.env.example` (resumo):
+
+- `PORT` — porta do servidor (recomendado 3001)
+- `DEV_DB_*`, `TEST_DB_*`, `PROD_DB_*` — credenciais por ambiente
+- `DB_DIALECT` — mysql (padrão) ou outro suportado
+- `JWT_SECRET` — segredo forte para tokens
+
+Observação: o app carrega o `.env` automaticamente (ver `src/app.js`).
 
 ## 3) Instalar dependências
 
@@ -22,23 +31,23 @@ cp .env.example .env
 npm install
 ```
 
-## 4) Preparar o banco de dados
+## 4) Banco de dados (migrations e sync)
 
-Crie os bancos (ou use migrations):
+Crie os bancos e rode migrations:
 
 ```
-# criar bancos se necessário (ajuste usuário/senha)
+# criar bancos (ajuste usuário/senha)
 mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS fastravel_dev; CREATE DATABASE IF NOT EXISTS fastravel_test; CREATE DATABASE IF NOT EXISTS fastravel_prod;"
 
-# rodar migrations (opcional em dev; obrigatório em prod)
+# rodar migrations
 npx sequelize db:migrate
 ```
 
-Observação: Em desenvolvimento o projeto faz `sequelize.sync()` por padrão, o que cria/atualiza tabelas automaticamente. Em produção, prefira somente migrations.
+No desenvolvimento, o projeto também executa `sequelize.sync()` (apenas fora de produção) para facilitar. Em produção, use somente migrations.
 
-## 5) Rodar
+## 5) Executar
 
-- Desenvolvimento (autoreload):
+- Desenvolvimento (com autoreload):
 
 ```
 npm run dev
@@ -50,24 +59,20 @@ npm run dev
 NODE_ENV=production npm start
 ```
 
-O servidor lê `.env` automaticamente.
+## 6) CORS
 
-## 6) Endpoints úteis
+O CORS está configurado em `src/app.js` para `http://localhost:3000`. Se o frontend estiver em outra origem, ajuste o valor de `origin`.
+
+## 7) Endpoints principais
 
 - `POST /users` — cria usuário
-- `POST /auth/login` — login e token JWT
+- `POST /auth/login` — autenticação (retorna JWT)
 - `GET /flights` — lista voos
-- `POST /bookings` — cria reserva (requer Bearer token)
+- `POST /bookings` — cria reserva (requer Authorization: Bearer <token>)
 
-## 7) Dicas para outros ambientes
+## 8) Dicas e problemas comuns
 
-- Ajuste os valores de `DEV_DB_*`, `TEST_DB_*`, `PROD_DB_*` no `.env` conforme as credenciais locais.
-- `DB_DIALECT` pode ser `mysql`, `postgres`, etc. (se trocar, instale o client correspondente).
-- Defina `JWT_SECRET` forte e único por ambiente.
-- Se usar Docker ou cloud, use variáveis de ambiente do serviço, não copie `.env` com segredos em repositórios.
-
-## 8) Problemas comuns
-
-- AccessDeniedError: verifique usuário/senha/host/porta no `.env`, se o MySQL está rodando e se o banco existe.
-- CORS: ajuste `origin` no `src/app.js` se o frontend rodar em outra URL.
-- Porta em uso: mude `PORT` no `.env`.
+- Erro de acesso ao banco: confira variáveis `*_DB_*` no `.env`, se o MySQL está rodando e se o banco existe.
+- Dialeto diferente (Postgres, etc.): ajuste `DB_DIALECT` e instale o client correspondente.
+- JWT: use um `JWT_SECRET` diferente por ambiente.
+- Porta em uso: altere `PORT`.

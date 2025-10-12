@@ -1,15 +1,29 @@
 // backend/src/controllers/userController.js
-const { User } = require('../models');
-const { get } = require('../routers/userRoutes');
+const { User } = require("../models");
+const { registerSchema } = require("../validations/userValidation");
 
 // Criar um novo usuário
 const createUser = async (req, res) => {
   try {
+    const { error } = registerSchema.validate(req.body);
+    if (error) return res.status(400).json({ error: error.details[0].message });
+
     const { nome, email, senha } = req.body;
     const user = await User.create({ nome, email, senha });
     res.status(201).json(user);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    // E-mail duplicado
+    if (error.name === "SequelizeUniqueConstraintError") {
+      return res.status(409).json({ error: "E-mail já cadastrado" });
+    }
+    // Erros de validação do Sequelize (se ocorrerem)
+    if (error.name === "SequelizeValidationError") {
+      const msg = error.errors?.[0]?.message || "Dados inválidos";
+      return res.status(400).json({ error: msg });
+    }
+    return res
+      .status(400)
+      .json({ error: error.message || "Erro ao criar usuário" });
   }
 };
 
@@ -30,7 +44,7 @@ const getUserById = async (req, res) => {
     const user = await User.findByPk(id);
 
     if (!user) {
-      return res.status(404).json({ error: 'Usuário não encontrado' });
+      return res.status(404).json({ error: "Usuário não encontrado" });
     }
 
     res.status(200).json(user);
@@ -47,7 +61,7 @@ const updateUser = async (req, res) => {
     const user = await User.findByPk(id);
 
     if (!user) {
-      return res.status(404).json({ error: 'Usuário não encontrado' });
+      return res.status(404).json({ error: "Usuário não encontrado" });
     }
 
     await user.update({ nome, email, senha });
@@ -64,7 +78,7 @@ const deleteUser = async (req, res) => {
     const user = await User.findByPk(id);
 
     if (!user) {
-      return res.status(404).json({ error: 'Usuário não encontrado' });
+      return res.status(404).json({ error: "Usuário não encontrado" });
     }
 
     await user.destroy();
@@ -73,7 +87,6 @@ const deleteUser = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
 
 module.exports = {
   createUser,

@@ -1,101 +1,185 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
-const Navbar = () => {
-  const [open, setOpen] = useState(false);
-  const [auth, setAuth] = useState(false);
+export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+  const { isAuth, logout } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    setAuth(!!token);
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setAuth(false);
-    navigate("/login");
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
   };
 
-  const linkClass = ({ isActive }) =>
-    isActive ? "text-blue-600 font-semibold" : "text-gray-700 hover:text-blue-500";
-
   return (
-    <header className="bg-white shadow">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          <Link to="/" className="text-xl font-bold text-blue-600">FasTravel</Link>
+    <nav className="bg-white/80 backdrop-blur border-b border-slate-200 fixed w-full z-40 top-0">
+      <div className="max-w-7xl mx-auto h-16 px-4 flex items-center justify-between">
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-3">
+          <img
+            src="/logo512.svg"
+            className="h-10 w-auto shrink-0"
+            alt="FasTravel"
+          />
+          <span className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
+            FasTravel
+          </span>
+        </Link>
 
-          {/* Desktop links */}
-          <nav className="hidden md:flex space-x-6">
-            <NavLink to="/" className={linkClass}>Home</NavLink>
-            <NavLink to="/flights" className={linkClass}>Voos</NavLink>
-            {auth && <NavLink to="/dashboard" className={linkClass}>Dashboard</NavLink>}
-          </nav>
-
-          {/* Desktop auth */}
-          <div className="hidden md:flex items-center space-x-3">
-            {!auth ? (
-              <>
-                <Link to="/login" className="px-3 py-1 border rounded hover:bg-gray-100">Entrar</Link>
-                <Link to="/register" className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">Cadastrar</Link>
-              </>
-            ) : (
-              <>
-                <button onClick={() => navigate("/dashboard")} className="px-3 py-1 border rounded">Minha Conta</button>
-                <button onClick={handleLogout} className="px-3 py-1 bg-red-500 text-white rounded">Sair</button>
-              </>
-            )}
-          </div>
-
-          {/* Mobile toggle */}
+        {/* Ações: apenas hamburguer (mobile) */}
+        <div className="flex items-center gap-2">
           <button
-            className="md:hidden p-2 rounded hover:bg-gray-100"
-            onClick={() => setOpen(!open)}
-            aria-label={open ? "Fechar menu" : "Abrir menu"}
-            aria-expanded={open}
+            onClick={toggleMenu}
+            type="button"
+            className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-slate-600 rounded-md md:hidden hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            aria-controls="navbar-sticky"
+            aria-expanded={isOpen}
           >
-            {open ? (
-              // X icon
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            ) : (
-              // Hamburger
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            )}
+            <span className="sr-only">Abrir menu</span>
+            <svg
+              className="w-5 h-5"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 17 14"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M1 1h15M1 7h15M1 13h15"
+              />
+            </svg>
           </button>
         </div>
 
-        {/* Mobile menu */}
-        {open && (
-          <div className="md:hidden py-2 space-y-1">
-            <NavLink to="/" className={linkClass} onClick={() => setOpen(false)}>Home</NavLink>
-            <NavLink to="/flights" className={linkClass} onClick={() => setOpen(false)}>Voos</NavLink>
+        {/* Menu alinhado à direita (desktop) e overlay (mobile) */}
+        <div
+          className={`items-center justify-end w-full md:w-auto md:flex md:static ${
+            isOpen ? "flex" : "hidden"
+          } absolute md:relative top-16 left-0 right-0 md:top-auto md:left-auto md:right-auto bg-white/95 md:bg-transparent backdrop-blur md:backdrop-blur-none border-t border-slate-200 md:border-0 px-4 md:px-0 py-3 md:py-0`}
+          id="navbar-sticky"
+        >
+          <div className="flex flex-col md:flex-row md:items-center md:gap-6 w-full md:w-auto">
+            <ul className="flex flex-col md:flex-row md:mt-0 gap-1 md:gap-6 font-medium md:items-center md:justify-end">
+              <li>
+                <NavLink
+                  to="/"
+                  className={({ isActive }) =>
+                    `block px-3 py-2 rounded-md ${
+                      isActive
+                        ? "text-slate-900"
+                        : "text-slate-700 hover:text-slate-900 hover:bg-slate-100"
+                    }`
+                  }
+                  end
+                  onClick={() => setIsOpen(false)}
+                >
+                  Home
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/flights"
+                  className={({ isActive }) =>
+                    `block px-3 py-2 rounded-md ${
+                      isActive
+                        ? "text-slate-900"
+                        : "text-slate-700 hover:text-slate-900 hover:bg-slate-100"
+                    }`
+                  }
+                  onClick={() => setIsOpen(false)}
+                >
+                  Voos
+                </NavLink>
+              </li>
+              {isAuth && (
+                <li>
+                  <NavLink
+                    to="/dashboard"
+                    className={({ isActive }) =>
+                      `block px-3 py-2 rounded-md ${
+                        isActive
+                          ? "text-slate-900"
+                          : "text-slate-700 hover:text-slate-900 hover:bg-slate-100"
+                      }`
+                    }
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Dashboard
+                  </NavLink>
+                </li>
+              )}
+            </ul>
 
-            {!auth ? (
-              <>
-                <Link to="/login" onClick={() => setOpen(false)} className="block py-2">Entrar</Link>
-                <Link to="/register" onClick={() => setOpen(false)} className="block py-2">Cadastrar</Link>
-              </>
-            ) : (
-              <>
-                <Link to="/dashboard" onClick={() => setOpen(false)} className="block py-2">Minha Conta</Link>
+            {/* Ações (desktop à direita dos links) */}
+            <div className="hidden md:flex items-center gap-2 md:ml-8">
+              {!isAuth ? (
+                <>
+                  <Link
+                    to="/login"
+                    className="inline-flex text-slate-700 hover:text-slate-900 hover:bg-slate-100 focus:ring-2 focus:outline-none focus:ring-indigo-200 font-medium rounded-md text-sm px-4 py-2"
+                  >
+                    Entrar
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="inline-flex text-white bg-gradient-to-r from-indigo-600 to-blue-600 hover:opacity-90 focus:ring-2 focus:outline-none focus:ring-indigo-300 font-medium rounded-md text-sm px-4 py-2"
+                  >
+                    Cadastrar
+                  </Link>
+                </>
+              ) : (
                 <button
-                  onClick={() => { handleLogout(); setOpen(false); }}
-                  className="block w-full text-left py-2"
+                  type="button"
+                  onClick={() => {
+                    logout();
+                    navigate("/");
+                  }}
+                  className="inline-flex text-white bg-red-600 hover:bg-red-700 focus:ring-2 focus:outline-none focus:ring-red-300 font-medium rounded-md text-sm px-4 py-2"
                 >
                   Sair
                 </button>
-              </>
+              )}
+            </div>
+
+            {/* Ações (mobile dentro do menu) */}
+            {!isAuth ? (
+              <div className="flex md:hidden flex-col gap-2 py-3">
+                <Link
+                  to="/login"
+                  className="w-full text-center text-slate-700 hover:text-slate-900 hover:bg-slate-100 font-medium rounded-md text-sm px-4 py-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Entrar
+                </Link>
+                <Link
+                  to="/register"
+                  className="w-full text-center text-white bg-gradient-to-r from-indigo-600 to-blue-600 hover:opacity-90 font-medium rounded-md text-sm px-4 py-2"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Cadastrar
+                </Link>
+              </div>
+            ) : (
+              <div className="flex md:hidden flex-col gap-2 py-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsOpen(false);
+                    logout();
+                    navigate("/");
+                  }}
+                  className="w-full text-center text-white bg-red-600 hover:bg-red-700 font-medium rounded-md text-sm px-4 py-2"
+                >
+                  Sair
+                </button>
+              </div>
             )}
           </div>
-        )}
+        </div>
       </div>
-    </header>
+    </nav>
   );
-};
-
-export default Navbar;
+}

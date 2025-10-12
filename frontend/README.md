@@ -1,70 +1,47 @@
-# Getting Started with Create React App
+# FasTravel – Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Aplicação React (Create React App) com Tailwind para busca e reserva de voos.
 
-## Available Scripts
+## Scripts
 
-In the project directory, you can run:
+- `npm start` – roda o app em desenvolvimento (http://localhost:3000)
+- `npm run build` – gera artefatos de produção em `build/`
+- `npm test` – roda testes (se configurados)
 
-### `npm start`
+## Variáveis de ambiente (.env)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Copie `.env.example` para `.env` e ajuste:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```
+REACT_APP_API_URL=http://localhost:3001
+REACT_APP_HERO_IMAGE=
+REACT_APP_ASSETS_BASE_URL=
+```
 
-### `npm test`
+- `REACT_APP_API_URL`: URL do backend (Express)
+- `REACT_APP_HERO_IMAGE`: URL total do banner principal da Home (opcional)
+- `REACT_APP_ASSETS_BASE_URL`: base de CDN/bucket para imagens dos destinos (opcional)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Observação: reinicie o `npm start` após mudar o `.env`.
 
-### `npm run build`
+## Logos & Ícones
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Troque arquivos em `public/`:
+  - `favicon.ico` (multi-tamanho recomendado: 16/32/48/64)
+  - `logo192.png` e `logo512.png` (PWA)
+  - `logo192.svg` e `logo512.svg` (usados no Footer/Navbar)
+  - `manifest.json` (nome do app e ícones)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Imagens da Home
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Hero: usa `REACT_APP_HERO_IMAGE` ou `REACT_APP_ASSETS_BASE_URL/hero.jpg` (fallback para `/hero.jpg`).
+- Destinos: usam `REACT_APP_ASSETS_BASE_URL + /destinos/{arquivo}.jpg` ou caminhos locais em `/public/destinos/`.
 
-### `npm run eject`
+Tamanhos sugeridos:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- Hero: 1920×1080 (JPG otimizado, < 300 KB)
+- Destinos: 800×600 (JPG otimizado, < 150 KB)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Build & Deploy
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+`npm run build` cria `build/`. Publique essa pasta em um host estático (Nginx/Apache/S3/Netlify). A pasta `build/` é gerada – não edite manualmente.

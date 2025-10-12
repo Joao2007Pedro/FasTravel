@@ -2,9 +2,13 @@
 const { User } = require('../models');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
+const { loginSchema } = require('../validations/userValidation');
 
 const login = async (req, res) => {
   try {
+    const { error } = loginSchema.validate(req.body);
+    if (error) return res.status(400).json({ error: error.details[0].message });
+
     const { email, senha } = req.body;
     if (!email || !senha) return res.status(400).json({ error: 'Email e senha são obrigatórios' });
 

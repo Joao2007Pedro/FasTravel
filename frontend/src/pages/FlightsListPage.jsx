@@ -1,29 +1,107 @@
-// src/pages/FlightsPage.jsx
-export default function FlightsPage() {
-  // Dados de teste
-  const flights = [
-    { id: 1, from: "São Paulo", to: "Rio de Janeiro", time: "08:00", price: "R$250" },
-    { id: 2, from: "São Paulo", to: "Brasília", time: "12:30", price: "R$320" },
-    { id: 3, from: "São Paulo", to: "Salvador", time: "16:45", price: "R$450" },
-  ];
+import { useEffect, useMemo, useState } from "react";
+import api from "../services/api";
+import SearchForm from "../components/SearchForm";
+import FlightCard from "../components/FlightCard";
+import Modal from "../components/Modal";
+import BookingForm from "../components/BookingForm";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+
+export default function FlightsListPage() {
+  const navigate = useNavigate();
+  const { isAuth } = useAuth();
+  const [flights, setFlights] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [selected, setSelected] = useState(null);
+
+  const initialParams = useMemo(() => {
+    const sp = new URLSearchParams(window.location.search);
+    const params = {};
+    if (sp.get("origem")) params.origem = sp.get("origem");
+    if (sp.get("destino")) params.destino = sp.get("destino");
+    if (sp.get("data")) params.data = sp.get("data");
+    return params;
+  }, []);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const { data } = await api.get("/flights", { params: initialParams });
+        if (mounted) setFlights(data);
+      } catch (e) {
+        setError("Não foi possível carregar os voos.");
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, [initialParams]);
 
   return (
-    <div className="min-h-screen p-8 bg-gray-50">
-      <h1 className="text-3xl font-bold text-center mb-8">Voos Disponíveis</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {flights.map((flight) => (
-          <div key={flight.id} className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
-            <h2 className="font-semibold text-xl mb-2">
-              {flight.from} → {flight.to}
-            </h2>
-            <p className="text-gray-600 mb-1">Horário: {flight.time}</p>
-            <p className="text-gray-800 font-semibold">Preço: {flight.price}</p>
-            <button className="mt-4 w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-              Reservar
-            </button>
-          </div>
-        ))}
+    <div className="min-h-screen bg-slate-50 p-4 md:p-8">
+      <h1 className="text-3xl font-bold text-center mb-6"></h1>
+      <div className="bg-white rounded-xl shadow p-4 sticky top-20 z-30 mb-6">
+        <SearchForm
+          onSearch={async (filters) => {
+            setLoading(true);
+            setError("");
+            try {
+              const { data } = await api.get("/flights", { params: filters });
+              setFlights(data);
+            } catch (e) {
+              setError("Não foi possível carregar os voos.");
+            } finally {
+              setLoading(false);
+            }
+          }}
+        />
       </div>
+      {loading && <p className="text-center">Carregando…</p>}
+      {error && <p className="text-center text-red-600">{error}</p>}
+      {!loading && !error && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {flights.map((f) => (
+            <FlightCard
+              key={f.id}
+              flight={f}
+              onReserve={(flight) => {
+                if (!isAuth) {
+                  navigate("/login", {
+                    state: { from: { pathname: "/flights" } },
+                  });
+                  return;
+                }
+                setSelected(flight);
+              }}
+            />
+          ))}
+          {flights.length === 0 && (
+            <p className="col-span-full text-center text-gray-600">
+              Nenhum voo encontrado.
+            </p>
+          )}
+        </div>
+      )}
+
+      <Modal
+        title="Confirmar Reserva"
+        open={!!selected}
+        onClose={() => setSelected(null)}
+      >
+        {selected && (
+          <BookingForm
+            flight={selected}
+            onSuccess={(booking) => {
+              setSelected(null);
+              navigate(`/checkout/${booking.id}`);
+            }}
+          />
+        )}
+      </Modal>
     </div>
   );
 }
