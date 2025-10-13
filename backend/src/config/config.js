@@ -1,4 +1,7 @@
 // backend/src/config/config.js
+
+require('dotenv').config(); // <--- esta linha importa as variáveis do .env
+
 module.exports = {
   development: {
     username: process.env.DEV_DB_USER,

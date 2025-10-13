@@ -12,7 +12,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white/80 backdrop-blur border-b border-slate-200 fixed w-full z-40 top-0">
+    <nav className="bg-gray-300 backdrop-blur border-b border-slate-200 fixed w-full z-40 top-0">
       <div className="max-w-7xl mx-auto h-16 px-4 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3">
