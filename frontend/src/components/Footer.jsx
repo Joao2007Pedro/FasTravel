@@ -1,4 +1,5 @@
 import React from "react";
+import { getAsset } from "../services/assets";
 
 const Footer = () => (
   <footer className="bg-slate-950 text-slate-300 mt-16">
@@ -6,7 +7,7 @@ const Footer = () => (
       <div className="grid grid-cols-1 gap-8">
         <div className="text-center">
           <div className="flex justify-center">
-            <img src="/logo512.svg" alt="FasTravel" className="h-8 w-auto opacity-90" />
+            <img src={getAsset("logo512.svg")} alt="FasTravel" className="h-8 w-auto opacity-90" />
           </div>
 
           <p className="mt-4 max-w-md text-slate-400 mx-auto">

@@ -1,23 +1,17 @@
 // src/pages/HomePage.jsx
 import { Link, useNavigate } from "react-router-dom";
 import SearchForm from "../components/SearchForm";
+import { getAsset, getHeroUrl } from "../services/assets";
 
 export default function HomePage() {
   const navigate = useNavigate();
-  // Base opcional para servir imagens de CDN/externo sem precisar adicionar arquivos no projeto
-  const assetBase = (process.env.REACT_APP_ASSETS_BASE_URL || "").replace(
-    /\/$/,
-    ""
-  );
-  const heroImage =
-    process.env.REACT_APP_HERO_IMAGE ||
-    (assetBase ? `${assetBase}/hero.jpg` : "/hero.jpg");
+  const heroImage = getHeroUrl();
   const destinos = [
-    { nome: "Rio de Janeiro", path: "/destinos/rio.jpg" },
-    { nome: "São Paulo", path: "/destinos/saopaulo.jpg" },
-    { nome: "Londres", path: "/destinos/londres.jpg" },
-    { nome: "Paris", path: "/destinos/paris.jpg" },
-  ].map((d) => ({ ...d, img: assetBase ? `${assetBase}${d.path}` : d.path }));
+    { nome: "Rio de Janeiro", path: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScs3RfBZzBa15XrsBJFv-Y65vIb687K4f4tQ&s" },
+    { nome: "São Paulo", path: "https://visitesaopaulo.com/wp-content/uploads/2023/05/banner-i.jpg" },
+    { nome: "Londres", path: "https://www.visitlondon.com/-/media/images/london/visit/general-london/westminster-at-dusk-london-1280x720.jpg?rev=3c05b9713c4b4405a7ab61aaeba53636&mw=800&hash=061A930869789795BC82B1A060E14562" },
+    { nome: "Paris", path: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS38xkOxYxBNjMVcCrzGk53UxalgO74vL23Pg&s" },
+  ].map((d) => ({ ...d, img: getAsset(d.path) }));
 
   return (
     <section className="bg-gradient-to-b from-slate-50 to-white">
