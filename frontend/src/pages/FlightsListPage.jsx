@@ -6,6 +6,7 @@ import Modal from "../components/Modal";
 import BookingForm from "../components/BookingForm";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import SkeletonCard from "../components/SkeletonCard";
 
 export default function FlightsListPage() {
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ export default function FlightsListPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 p-4 md:p-8">
-      <h1 className="text-3xl font-bold text-center mb-6"></h1>
+  <h1 className="text-3xl font-bold text-center mb-6">Voos disponíveis</h1>
       <div className="bg-white rounded-xl shadow p-4 sticky top-20 z-30 mb-6">
         <SearchForm
           onSearch={async (filters) => {
@@ -60,7 +61,13 @@ export default function FlightsListPage() {
           }}
         />
       </div>
-      {loading && <p className="text-center">Carregando…</p>}
+      {loading && (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <SkeletonCard key={i} />
+          ))}
+        </div>
+      )}
       {error && <p className="text-center text-red-600">{error}</p>}
       {!loading && !error && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

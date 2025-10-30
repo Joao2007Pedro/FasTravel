@@ -17,3 +17,13 @@ exports.bookingSchema = Joi.object({
     "any.required": 'O campo "precoTotal" é obrigatório',
   }),
 }).unknown(false);
+
+exports.bookingStatusSchema = Joi.object({
+  status: Joi.string()
+    .valid("pending", "paid", "canceled", "confirmed")
+    .required()
+    .messages({
+      "any.only": 'Status deve ser um de: "pending", "paid", "canceled", "confirmed"',
+      "any.required": 'O campo "status" é obrigatório',
+    }),
+}).unknown(false);

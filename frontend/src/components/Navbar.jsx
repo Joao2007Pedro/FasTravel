@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { Plane, UserCircle } from "@heroicons/react/24/solid";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,18 +13,12 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-gray-300 backdrop-blur border-b border-slate-200 fixed w-full z-40 top-0">
+    <nav className="bg-gradient-to-r from-indigo-600/90 to-blue-600/90 text-white backdrop-blur fixed w-full z-40 top-0 shadow">
       <div className="max-w-7xl mx-auto h-16 px-4 flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-3">
-          <img
-            src="/logo512.svg"
-            className="h-10 w-auto shrink-0"
-            alt="FasTravel"
-          />
-          <span className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
-            FasTravel
-          </span>
+        <Link to="/" className="flex items-center gap-3 group">
+          <Plane className="h-7 w-7 text-white/90 group-hover:text-white transition" />
+          <span className="text-xl font-bold">FasTravel</span>
         </Link>
 
         {/* Ações: apenas hamburguer (mobile) */}
@@ -31,7 +26,7 @@ export default function Navbar() {
           <button
             onClick={toggleMenu}
             type="button"
-            className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-slate-600 rounded-md md:hidden hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-200"
+            className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-white/90 rounded-md md:hidden hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/40"
             aria-controls="navbar-sticky"
             aria-expanded={isOpen}
           >
@@ -58,7 +53,7 @@ export default function Navbar() {
         <div
           className={`items-center justify-end w-full md:w-auto md:flex md:static ${
             isOpen ? "flex" : "hidden"
-          } absolute md:relative top-16 left-0 right-0 md:top-auto md:left-auto md:right-auto bg-white/95 md:bg-transparent backdrop-blur md:backdrop-blur-none border-t border-slate-200 md:border-0 px-4 md:px-0 py-3 md:py-0`}
+          } absolute md:relative top-16 left-0 right-0 md:top-auto md:left-auto md:right-auto bg-white text-slate-800 md:bg-transparent md:text-white backdrop-blur md:backdrop-blur-none border-t border-white/20 md:border-0 px-4 md:px-0 py-3 md:py-0`}
           id="navbar-sticky"
         >
           <div className="flex flex-col md:flex-row md:items-center md:gap-6 w-full md:w-auto">
@@ -67,10 +62,10 @@ export default function Navbar() {
                 <NavLink
                   to="/"
                   className={({ isActive }) =>
-                    `block px-3 py-2 rounded-md ${
+                    `block px-3 py-2 rounded-md transition ${
                       isActive
-                        ? "text-slate-900"
-                        : "text-slate-700 hover:text-slate-900 hover:bg-slate-100"
+                        ? "text-indigo-600 md:text-white md:underline"
+                        : "hover:opacity-90 md:hover:bg-white/10"
                     }`
                   }
                   end
@@ -83,10 +78,10 @@ export default function Navbar() {
                 <NavLink
                   to="/flights"
                   className={({ isActive }) =>
-                    `block px-3 py-2 rounded-md ${
+                    `block px-3 py-2 rounded-md transition ${
                       isActive
-                        ? "text-slate-900"
-                        : "text-slate-700 hover:text-slate-900 hover:bg-slate-100"
+                        ? "text-indigo-600 md:text-white md:underline"
+                        : "hover:opacity-90 md:hover:bg-white/10"
                     }`
                   }
                   onClick={() => setIsOpen(false)}
@@ -99,10 +94,10 @@ export default function Navbar() {
                   <NavLink
                     to="/dashboard"
                     className={({ isActive }) =>
-                      `block px-3 py-2 rounded-md ${
+                      `block px-3 py-2 rounded-md transition ${
                         isActive
-                          ? "text-slate-900"
-                          : "text-slate-700 hover:text-slate-900 hover:bg-slate-100"
+                          ? "text-indigo-600 md:text-white md:underline"
+                          : "hover:opacity-90 md:hover:bg-white/10"
                       }`
                     }
                     onClick={() => setIsOpen(false)}
@@ -119,13 +114,13 @@ export default function Navbar() {
                 <>
                   <Link
                     to="/login"
-                    className="inline-flex text-slate-700 hover:text-slate-900 hover:bg-slate-100 focus:ring-2 focus:outline-none focus:ring-indigo-200 font-medium rounded-md text-sm px-4 py-2"
+                    className="inline-flex text-white/90 hover:text-white hover:bg-white/10 focus:ring-2 focus:outline-none focus:ring-white/40 font-medium rounded-md text-sm px-4 py-2"
                   >
-                    Entrar
+                    <UserCircle className="h-5 w-5 mr-2" /> Entrar
                   </Link>
                   <Link
                     to="/register"
-                    className="inline-flex text-white bg-gradient-to-r from-indigo-600 to-blue-600 hover:opacity-90 focus:ring-2 focus:outline-none focus:ring-indigo-300 font-medium rounded-md text-sm px-4 py-2"
+                    className="inline-flex text-indigo-600 bg-white hover:bg-slate-50 focus:ring-2 focus:outline-none focus:ring-white/40 font-semibold rounded-md text-sm px-4 py-2"
                   >
                     Cadastrar
                   </Link>
@@ -149,14 +144,14 @@ export default function Navbar() {
               <div className="flex md:hidden flex-col gap-2 py-3">
                 <Link
                   to="/login"
-                  className="w-full text-center text-slate-700 hover:text-slate-900 hover:bg-slate-100 font-medium rounded-md text-sm px-4 py-2"
+                  className="w-full text-center text-slate-800 hover:text-slate-900 hover:bg-slate-100 font-medium rounded-md text-sm px-4 py-2"
                   onClick={() => setIsOpen(false)}
                 >
                   Entrar
                 </Link>
                 <Link
                   to="/register"
-                  className="w-full text-center text-white bg-gradient-to-r from-indigo-600 to-blue-600 hover:opacity-90 font-medium rounded-md text-sm px-4 py-2"
+                  className="w-full text-center text-white bg-indigo-600 hover:bg-indigo-700 font-medium rounded-md text-sm px-4 py-2"
                   onClick={() => setIsOpen(false)}
                 >
                   Cadastrar

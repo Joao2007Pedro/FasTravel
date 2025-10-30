@@ -1,7 +1,9 @@
 import { useNavigate, useLocation, Link } from "react-router-dom";
-import { useAuth } from "../../src/context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { toast } from "react-hot-toast";
+import Spinner from "../components/Spinner";
 
 const schema = Yup.object({
   email: Yup.string().email("E-mail inválido").required("Informe o e-mail"),
@@ -24,9 +26,11 @@ export default function LoginPage() {
           setStatus("");
           try {
             await login(values.email, values.senha);
+            toast.success("Login realizado!");
             navigate(from, { replace: true });
           } catch (e) {
             setStatus("Credenciais inválidas ou erro no servidor");
+            toast.error("Falha no login");
           } finally {
             setSubmitting(false);
           }
@@ -64,8 +68,9 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+              className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 disabled:opacity-60 inline-flex items-center justify-center gap-2"
             >
+              {isSubmitting && <Spinner size={16} />}
               {isSubmitting ? "Entrando…" : "Entrar"}
             </button>
             <p className="text-sm text-center mt-2">

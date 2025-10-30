@@ -13,7 +13,7 @@ app.use(helmet());
 app.use(
   cors({
     origin: "http://localhost:3000",
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
@@ -32,7 +32,7 @@ db.sequelize
   .then(async () => {
     // Em dev, manter sync; em prod, prefira migrations
     if (process.env.NODE_ENV !== "production") {
-      await db.sequelize.sync();
+      await db.sequelize.sync({ alter: true });
     }
     app.listen(PORT, () => {
       console.log(`Servidor rodando na porta ${PORT}`);

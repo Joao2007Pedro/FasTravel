@@ -31,7 +31,7 @@ export default function HomePage() {
           </p>
           <Link
             to="/flights"
-            className="inline-flex mt-8 bg-gradient-to-r from-indigo-600 to-blue-600 text-white px-6 py-3 rounded-lg shadow hover:opacity-90"
+            className="inline-flex mt-8 bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg shadow"
           >
             Buscar Voos
           </Link>

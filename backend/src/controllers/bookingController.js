@@ -1,6 +1,6 @@
 // backend/src/controllers/bookingController.js
 const { Booking, Flight, User } = require("../models");
-const { bookingSchema } = require("../validations/bookingValidation");
+const { bookingSchema, bookingStatusSchema } = require("../validations/bookingValidation");
 
 // Criar reserva
 exports.createBooking = async (req, res) => {
@@ -17,6 +17,7 @@ exports.createBooking = async (req, res) => {
       userId: req.user.id, // vem do token
       quantidade,
       precoTotal,
+      status: 'pending',
     });
     res.status(201).json(booking);
   } catch (err) {
@@ -59,7 +60,47 @@ exports.getBookingById = async (req, res) => {
     const booking = await Booking.findByPk(id, { include: ["user", "flight"] });
     if (!booking)
       return res.status(404).json({ error: "Reserva não encontrada" });
+    if (booking.userId !== req.user.id) {
+      return res.status(403).json({ error: "Acesso não autorizado a esta reserva" });
+    }
     return res.json(booking);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+// Atualizar status da reserva (ex.: pending -> paid, canceled)
+exports.updateBookingStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { error } = bookingStatusSchema.validate(req.body);
+    if (error) return res.status(400).json({ error: error.details[0].message });
+
+    const booking = await Booking.findByPk(id);
+    if (!booking) return res.status(404).json({ error: "Reserva não encontrada" });
+    if (booking.userId !== req.user.id) {
+      return res.status(403).json({ error: "Acesso não autorizado a esta reserva" });
+    }
+
+    booking.status = req.body.status;
+    await booking.save();
+    return res.json(booking);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+// Cancelar reserva (remoção)
+exports.deleteBooking = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const booking = await Booking.findByPk(id);
+    if (!booking) return res.status(404).json({ error: "Reserva não encontrada" });
+    if (booking.userId !== req.user.id) {
+      return res.status(403).json({ error: "Acesso não autorizado a esta reserva" });
+    }
+    await booking.destroy();
+    return res.status(204).send();
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }

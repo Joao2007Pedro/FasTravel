@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { Toaster } from "react-hot-toast";
 
 // Importação das páginas
 import HomePage from "./pages/HomePage";
@@ -35,6 +36,7 @@ function App() {
           </Routes>
         </main>
         <Footer />
+        <Toaster position="top-right" />
       </Router>
     </AuthProvider>
   );

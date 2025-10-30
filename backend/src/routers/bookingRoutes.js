@@ -7,5 +7,15 @@ const authMiddleware = require("../middlewares/auth");
 router.post("/", authMiddleware, bookingController.createBooking);
 router.get("/", authMiddleware, bookingController.getBookings);
 router.get("/:id", authMiddleware, bookingController.getBookingById);
+router.patch(
+	"/:id/status",
+	authMiddleware,
+	bookingController.updateBookingStatus
+);
+router.delete(
+	"/:id",
+	authMiddleware,
+	bookingController.deleteBooking
+);
 
 module.exports = router;

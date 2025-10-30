@@ -3,6 +3,8 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import api from "../services/api";
 import { useAuth } from "../context/AuthContext";
+import { toast } from "react-hot-toast";
+import Spinner from "../components/Spinner";
 
 const schema = Yup.object({
   nome: Yup.string().required("Informe seu nome"),
@@ -26,12 +28,14 @@ export default function RegisterPage() {
             await api.post("/users", values);
             // login automático após cadastro
             await login(values.email, values.senha);
+            toast.success("Cadastro realizado!");
             navigate("/dashboard", { replace: true });
           } catch (e) {
             const msg =
               e?.response?.data?.error ||
               "Não foi possível cadastrar. Tente outro e-mail.";
             setStatus(msg);
+            toast.error(msg);
           } finally {
             setSubmitting(false);
           }
@@ -82,8 +86,9 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
+              className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 disabled:opacity-60 inline-flex items-center justify-center gap-2"
             >
+              {isSubmitting && <Spinner size={16} />}
               {isSubmitting ? "Cadastrando…" : "Cadastrar"}
             </button>
             <p className="text-sm text-center mt-2">
