@@ -10,9 +10,13 @@ const db = require("./models");
 app.use(express.json());
 app.use(helmet());
 
+// CORS: permite configurar múltiplas origens via env (separadas por vírgula)
+const corsOrigin = (process.env.CORS_ORIGIN || "http://localhost:3000")
+  .split(",")
+  .map((o) => o.trim());
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: corsOrigin,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })

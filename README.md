@@ -80,21 +80,28 @@ O projeto é desenvolvido como parte de um trabalho acadêmico, dividido em **tr
 
 ### **Rodando o Backend**
 
-```bash
+```powershell
 cd backend
 npm install
+Copy-Item .env.example .env
+# Edite .env (PORT, credenciais do banco, CORS_ORIGIN)
+notepad .env
 npm run dev
 ```
 
-Por padrão, o backend usa a porta definida no `.env` (variável `PORT`).
-Se não houver `PORT`, ele sobe em `http://localhost:3000`.
-Recomenda-se definir `PORT=3001` no backend para evitar conflito com o frontend em `3000`.
+Observações:
+- Porta padrão: se `PORT` não for definida, o backend sobe em `3001`.
+- CORS: defina `CORS_ORIGIN` (ex.: `http://localhost:3000` ou múltiplas origens separadas por vírgula) para outro ambiente.
+- Banco: em modo não-produção, o backend faz `sequelize.sync({ alter: true })`, criando/ajustando as tabelas automaticamente (sem necessidade de rodar migrations manualmente para a demo).
 
 ### **Rodando o Frontend**
 
-```bash
+```powershell
 cd frontend
 npm install
+Copy-Item .env.example .env
+# Ajuste REACT_APP_API_URL para apontar para o backend
+notepad .env
 npm start
 ```
 
@@ -125,7 +132,7 @@ REACT_APP_ASSETS_BASE_URL=
 
 Crie `frontend/.env` copiando do exemplo e ajuste os valores locais. O arquivo `.env` já está no `.gitignore` do frontend e não será commitado.
 
-Backend: configure as credenciais do banco e a `PORT` no `.env` do backend (ver `backend/README.md` e `.env.example`).
+Backend: configure as credenciais do banco e a `PORT` no `.env` do backend (ver `backend/.env.example`). Você também pode ajustar `CORS_ORIGIN` para a URL do frontend no ambiente onde rodará.
 
 ---
 
