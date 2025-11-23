@@ -17,5 +17,6 @@ router.delete(
 	authMiddleware,
 	bookingController.deleteBooking
 );
+router.post("/:id/payment", authMiddleware, bookingController.processPayment);
 
 module.exports = router;

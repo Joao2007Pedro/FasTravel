@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import {
-  PaperAirplaneIcon,
   UserCircleIcon,
 } from "@heroicons/react/24/solid";
 
@@ -21,7 +20,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto h-16 px-4 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3 group">
-          <PaperAirplaneIcon className="h-6 w-6" />
+          <img src="/logo512.svg" alt="FasTravel Logo" className="h-8 w-8" />
           <span className="text-xl font-bold">FasTravel</span>
         </Link>
 
@@ -124,7 +123,7 @@ export default function Navbar() {
                   </Link>
                   <Link
                     to="/register"
-                    className="inline-flex text-indigo-600 bg-white hover:bg-slate-50 focus:ring-2 focus:outline-none focus:ring-white/40 font-semibold rounded-md text-sm px-4 py-2"
+                    className="inline-flex text-indigo-650 bg-white hover:bg-slate-50 focus:ring-2 focus:outline-none focus:ring-white/40 font-semibold rounded-md text-sm px-4 py-2"
                   >
                     Cadastrar
                   </Link>

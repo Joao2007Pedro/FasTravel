@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import api from "../services/api";
 import SearchForm from "../components/SearchForm";
 import FlightCard from "../components/FlightCard";
@@ -25,6 +25,35 @@ export default function FlightsListPage() {
     return params;
   }, []);
 
+  const onSearch = useCallback(
+    async (filters) => {
+      setLoading(true);
+      setError("");
+      try {
+        const { data } = await api.get("/flights", { params: filters });
+        setFlights(data);
+      } catch (e) {
+        setError("Não foi possível carregar os voos.");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [setLoading, setError, setFlights]
+  );
+
+  const onReserve = useCallback(
+    (flight) => {
+      if (!isAuth) {
+        navigate("/login", {
+          state: { from: { pathname: "/flights" } },
+        });
+        return;
+      }
+      setSelected(flight);
+    },
+    [isAuth, navigate]
+  );
+
   useEffect(() => {
     let mounted = true;
     (async () => {
@@ -44,22 +73,9 @@ export default function FlightsListPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 p-4 md:p-8">
-  <h1 className="text-3xl font-bold text-center mb-6">Voos disponíveis</h1>
+      <h1 className="text-3xl font-bold text-center mb-6">Voos disponíveis</h1>
       <div className="bg-white rounded-xl shadow p-4 sticky top-20 z-30 mb-6">
-        <SearchForm
-          onSearch={async (filters) => {
-            setLoading(true);
-            setError("");
-            try {
-              const { data } = await api.get("/flights", { params: filters });
-              setFlights(data);
-            } catch (e) {
-              setError("Não foi possível carregar os voos.");
-            } finally {
-              setLoading(false);
-            }
-          }}
-        />
+        <SearchForm onSearch={onSearch} />
       </div>
       {loading && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -75,15 +91,7 @@ export default function FlightsListPage() {
             <FlightCard
               key={f.id}
               flight={f}
-              onReserve={(flight) => {
-                if (!isAuth) {
-                  navigate("/login", {
-                    state: { from: { pathname: "/flights" } },
-                  });
-                  return;
-                }
-                setSelected(flight);
-              }}
+              onReserve={onReserve}
             />
           ))}
           {flights.length === 0 && (

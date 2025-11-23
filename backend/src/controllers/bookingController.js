@@ -105,3 +105,47 @@ exports.deleteBooking = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+// Simular processamento de pagamento e confirmar a reserva
+exports.processPayment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const booking = await Booking.findByPk(id);
+
+    if (!booking) {
+      return res.status(404).json({ error: "Reserva não encontrada" });
+    }
+
+    // Apenas o usuário que criou a reserva pode pagar
+    if (booking.userId !== req.user.id) {
+      return res.status(403).json({ error: "Acesso não autorizado a esta reserva" });
+    }
+
+    // Simulação de uma chamada a um gateway de pagamento
+    // Em um cenário real, aqui você integraria com Stripe, PayPal, etc.
+    const pagamentoAprovado = await simularGatewayPagamento();
+
+    if (pagamentoAprovado) {
+      booking.status = 'confirmed';
+      await booking.save();
+      res.json({ message: "Pagamento bem-sucedido e reserva confirmada", booking });
+    } else {
+      booking.status = 'failed';
+      await booking.save();
+      res.status(400).json({ error: "Pagamento falhou" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Função auxiliar para simular a resposta de um gateway de pagamento
+const simularGatewayPagamento = () => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      // Simula sucesso em 90% dos casos
+      const sucesso = Math.random() < 0.9;
+      resolve(sucesso);
+    }, 2000); // Simula 2 segundos de processamento
+  });
+};

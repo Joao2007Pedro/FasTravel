@@ -99,14 +99,13 @@ export default function CheckoutPage() {
             setSuccessMsg("");
             setStatus("");
             try {
-              const { data } = await api.patch(`/bookings/${id}/status`, {
-                status: "paid",
-              });
-              setBooking(data);
-              setSuccessMsg("Pagamento confirmado! Sua reserva está paga.");
-              toast.success("Pagamento confirmado!");
+              // A real integration would pass payment details here
+              const { data } = await api.post(`/bookings/${id}/payment`);
+              setBooking(data.booking); // The backend now returns the updated booking object
+              setSuccessMsg(data.message);
+              toast.success(data.message);
             } catch (e) {
-              const msg = e?.response?.data?.error || "Não foi possível confirmar o pagamento.";
+              const msg = e?.response?.data?.error || "Não foi possível processar o pagamento.";
               setError(msg);
               setStatus(msg);
               toast.error(msg);
