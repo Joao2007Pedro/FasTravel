@@ -158,11 +158,9 @@ Backend: configure as credenciais do banco e a `PORT` no `.env` do backend (ver 
 
 ## ✅ Próximos Passos
 
-- [ ] Completar CRUD de usuários e voos (GET/PUT/DELETE)
-- [ ] Proteger rotas sensíveis com JWT e rate limit
-- [ ] Filtros/paginação em voos e reservas
-- [ ] Testes (Jest + Supertest) e coleção Postman
-- [ ] Documentar API com Swagger
-- [ ] Seeders de dados para desenvolvimento
+- [✅] Completar CRUD de usuários e voos (GET/PUT/DELETE)
+- [✅] Proteger rotas sensíveis com JWT e rate limit
+- [✅] Filtros/paginação em voos e reservas
+- [✅] Testes (Jest + Supertest) e coleção Postman
 
 ---
